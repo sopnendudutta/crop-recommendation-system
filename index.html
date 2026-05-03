@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Crop Recommendation System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+      :root {
+        --primary-clay: #d97757;
+        --deep-forest: #2d4635;
+        --sand-beige: #f4f1ea;
+        --leaf-green: #5b8a72;
+      }
+      body {
+        background: linear-gradient(135deg, #f4f1ea 0%, #e2e8e4 100%);
+        font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        min-height: 100vh;
+        color: var(--deep-forest);
+      }
+      .navbar {
+        background-color: var(--deep-forest) !important;
+        border-bottom: 4px solid var(--primary-clay);
+      }
+      .navbar-brand { font-weight: 700; letter-spacing: 1px; color: #fff !important; }
+      h1 { font-weight: 800; color: var(--deep-forest); text-align: center; margin-bottom: 1.5rem; position: relative; }
+      h1::after { content: ''; display: block; width: 60px; height: 4px; background: var(--primary-clay); margin: 10px auto; border-radius: 2px; }
+      .form-section {
+        background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 24px;
+        padding: 3rem;
+        box-shadow: 0 15px 35px rgba(45, 70, 53, 0.1);
+        max-width: 900px;
+        margin: 3rem auto;
+      }
+      .input-group-text { background-color: #fff; border-right: none; color: var(--leaf-green); min-width: 45px; justify-content: center; }
+      .form-control { border-left: none; padding: 0.75rem; border-radius: 0 10px 10px 0; }
+      .form-control:focus { border-color: var(--leaf-green); box-shadow: 0 0 0 0.25rem rgba(91, 138, 114, 0.15); }
+      label { font-weight: 700; font-size: 0.85rem; margin-bottom: 0.5rem; color: var(--deep-forest); text-transform: uppercase; letter-spacing: 0.5px; }
+      .btn-submit {
+        background-color: var(--primary-clay);
+        color: white; border: none; font-weight: 700; padding: 1rem 3rem; border-radius: 12px; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(217, 119, 87, 0.3);
+      }
+      .btn-submit:hover { background-color: #c2654a; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(217, 119, 87, 0.4); color: white; }
+      .card-result {
+        background: var(--deep-forest); color: #fff; margin: 2rem auto; padding: 2rem; border-radius: 20px; max-width: 600px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2); border-left: 8px solid var(--primary-clay); animation: slideUp 0.5s ease-out; text-align: center;
+      }
+      @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+      .footer-text { text-align: center; font-size: 0.8rem; color: var(--leaf-green); margin-bottom: 2rem; }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+      <div class="container">
+        <a class="navbar-brand" href="/"><i class="fas fa-seedling me-2"></i>ROYINTECH AGRO</a>
+      </div>
+    </nav>
+
+    <div class="container">
+      <div class="form-section">
+        <h1>Crop Recommendation</h1>
+        <p class="text-center text-muted mb-4">Input soil and environmental data to find the optimal crop for your land.</p>
+        
+        <form action="/predict" method="POST">
+          <div class="row g-4">
+            <!-- Soil Nutrients -->
+            <div class="col-md-4">
+              <label><i class="fas fa-flask me-1"></i> Nitrogen</label>
+              <div class="input-group">
+                <span class="input-group-text">N</span>
+                <input type="number" name="Nitrogen" class="form-control" placeholder="e.g. 90" required step="0.01" />
+              </div>
+            </div>
+            <div class="col-md-4">
+              <label><i class="fas fa-flask me-1"></i> Phosphorus</label>
+              <div class="input-group">
+                <span class="input-group-text">P</span>
+                <!-- name="Phosporus" matches your app.py spelling -->
+                <input type="number" name="Phosporus" class="form-control" placeholder="e.g. 42" required step="0.01" />
+              </div>
+            </div>
+            <div class="col-md-4">
+              <label><i class="fas fa-flask me-1"></i> Potassium</label>
+              <div class="input-group">
+                <span class="input-group-text">K</span>
+                <input type="number" name="Potassium" class="form-control" placeholder="e.g. 43" required step="0.01" />
+              </div>
+            </div>
+
+            <!-- Environmental Factors -->
+            <div class="col-md-4">
+              <label><i class="fas fa-thermometer-half me-1"></i> Temperature</label>
+              <div class="input-group">
+                <span class="input-group-text">°C</span>
+                <input type="number" name="Temperature" class="form-control" placeholder="22.5" required step="0.01" />
+              </div>
+            </div>
+            <div class="col-md-4">
+              <label><i class="fas fa-tint me-1"></i> Humidity</label>
+              <div class="input-group">
+                <span class="input-group-text">%</span>
+                <input type="number" name="Humidity" class="form-control" placeholder="80.0" required step="0.01" />
+              </div>
+            </div>
+            <div class="col-md-4">
+              <label><i class="fas fa-vial me-1"></i> pH Level</label>
+              <div class="input-group">
+                <span class="input-group-text">pH</span>
+                <!-- name="Ph" matches your app.py spelling -->
+                <input type="number" name="Ph" class="form-control" placeholder="6.5" required step="0.01" />
+              </div>
+            </div>
+
+            <div class="col-md-12">
+              <label><i class="fas fa-cloud-showers-heavy me-1"></i> Rainfall (mm)</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-cloud-rain"></i></span>
+                <input type="number" name="Rainfall" class="form-control" placeholder="e.g. 200" required step="0.01" />
+              </div>
+            </div>
+
+            <div class="col-md-12 d-flex justify-content-center mt-5">
+              <button type="submit" class="btn btn-submit btn-lg">
+                <i class="fas fa-magnifying-glass me-2"></i> ANALYZE LAND
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!-- Result Section -->
+    
+      <div class="card-result">
+        <h4 class="mb-3" style="color: var(--primary-clay);"><i class="fas fa-check-circle me-2"></i>Analysis Complete</h4>
+        <p class="fs-5 mb-0">Based on your soil data, we recommend:</p>
+        <div class="display-6 fw-bold mt-2" style="letter-spacing: 1px;">Result will be here!</div>
+      </div>
+      
+
+      <p class="footer-text">RoyInTech Smart Farming Module v2.0</p>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
