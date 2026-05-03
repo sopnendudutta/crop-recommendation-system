@@ -1,6 +1,10 @@
 from flask import Flask, request, render_template
 import numpy as np
 import pickle
+import json
+
+with open('crop_dict.json', 'w') as f:
+    json.dump(crop_dict, f)
 
 # Load the model and scalers
 model = pickle.load(open('model.pkl', 'rb'))
